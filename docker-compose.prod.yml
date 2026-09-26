@@ -1,0 +1,25 @@
+services:
+  bot:
+    build:
+      context: .
+      target: runtime
+    command: uvicorn bot.main:app --host 0.0.0.0 --port 8000
+    volumes: []
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    ports: []
+    restart: unless-stopped
+
+  redis:
+    ports: []
+    restart: unless-stopped
